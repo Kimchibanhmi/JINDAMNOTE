@@ -9,10 +9,22 @@ const serverless = require('serverless-http');
 dotenv.config();
 
 // 서비스 계정 인증 설정
-const auth = new GoogleAuth({
-  credentials: JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON),
-  scopes: ['https://www.googleapis.com/auth/cloud-platform'],
-});
+let auth;
+try {
+  if (process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON) {
+    auth = new GoogleAuth({
+      credentials: JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON),
+      scopes: ['https://www.googleapis.com/auth/cloud-platform'],
+    });
+    console.log('서비스 계정 인증 설정 완료');
+  } else {
+    console.log('서비스 계정 인증 정보가 없습니다. 로컬 모드로 실행합니다.');
+    auth = null;
+  }
+} catch (error) {
+  console.error('서비스 계정 인증 설정 오류:', error);
+  auth = null;
+}
 
 const app = express();
 
@@ -112,6 +124,13 @@ app.post('/generate-examples', async (req, res) => {
     console.log(`선택된 중국어 예문: ${chineseExample}`);
 
     try {
+      // auth가 null이면 바로 예외 발생시켜 로컬 번역 사용
+      if (!auth) {
+        throw new Error(
+          '서비스 계정 인증 정보가 없습니다. 로컬 번역을 사용합니다.'
+        );
+      }
+
       // 서비스 계정 인증 토큰 가져오기
       const client = await auth.getClient();
       const accessToken = await client.getAccessToken();
@@ -311,7 +330,6 @@ app.post('/generate-examples', async (req, res) => {
     });
   }
 });
-
 
 // 서버리스 함수로 변환
 module.exports.handler = serverless(app);
