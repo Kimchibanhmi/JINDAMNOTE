@@ -15,14 +15,10 @@ const auth = new GoogleAuth({
 });
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-// CORS 헤더 직접 설정
+// CORS 설정 - Netlify 호스팅에서는 필요 없지만 개발 환경을 위해 유지
 app.use((req, res, next) => {
-  res.setHeader(
-    'Access-Control-Allow-Origin',
-    '*' // 모든 출처에서의 요청 허용 (임시)
-  );
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -33,46 +29,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// CORS 헤더 직접 설정
-app.use((req, res, next) => {
-  res.setHeader(
-    'Access-Control-Allow-Origin',
-    '*' // 모든 출처에서의 요청 허용 (임시)
-  );
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-  next();
-});
-
-// 기존 CORS 설정도 유지
-app.use(
-  cors({
-    origin: 'https://funny-tartufo-4b975f.netlify.app', // 슬래시 제거
-    methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-  })
-);
-
-// 기존 CORS 설정도 유지
-app.use(
-  cors({
-    origin: '*', // 모든 출처에서의 요청 허용 (임시)
-    methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-  })
-);
-
-// 프리플라이트 요청 처리
-app.options('*', cors());
-
-// JSON 요청 바디 파싱
+// JSON 파싱 미들웨어
 app.use(express.json());
 
 // 서버 상태 확인 엔드포인트
@@ -355,8 +312,6 @@ app.post('/generate-examples', async (req, res) => {
   }
 });
 
-// 정적 파일 제공 (클라이언트 코드)
-app.use(express.static('../'));
 
 // 서버리스 함수로 변환
 module.exports.handler = serverless(app);
