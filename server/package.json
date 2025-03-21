@@ -1,0 +1,16 @@
+{
+  "name": "jindam-note-server",
+  "version": "1.0.0",
+  "description": "중국어 단어장 앱을 위한 프록시 서버",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "google-auth-library": "^9.15.1"
+  }
+}

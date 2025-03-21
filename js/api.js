@@ -1,7 +1,7 @@
 // Gemini API 연동 (프록시 서버 사용)
 const ApiService = {
   // API 서버 URL (개발용 프록시 서버)
-  API_URL: 'http://localhost:3000',
+  API_URL: 'https://jindamnote-server.onrender.com',
 
   // 단어의 병음과 의미 가져오기
   getWordInfo: async function (word) {
