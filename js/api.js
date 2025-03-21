@@ -2,6 +2,14 @@
 const ApiService = {
   // API 서버 URL (리디렉션 규칙 사용)
   API_URL: '/api',
+  // 현재 사이트의 도메인으로 절대 URL 생성
+  getFullApiUrl: function (path) {
+    // 현재 사이트의 오리진 (프로토콜 + 도메인)
+    const origin = window.location.origin;
+    // API 기본 경로를 제외한 순수 엔드포인트 경로
+    const cleanPath = path.replace(/^\/+/, '');
+    return `${origin}/api/${cleanPath}`;
+  },
 
   // 단어의 병음과 의미 가져오기
   getWordInfo: async function (word) {
@@ -29,8 +37,11 @@ const ApiService = {
         return commonWords[word];
       }
 
-      // 프록시 서버에 요청
-      const response = await fetch(`${this.API_URL}/word-info`, {
+      // 프록시 서버에 요청 (절대 URL 사용)
+      const requestURL = this.getFullApiUrl('word-info');
+      console.log('단어 정보 요청 URL:', requestURL);
+
+      const response = await fetch(requestURL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -152,7 +163,8 @@ const ApiService = {
       let safePin = pinyin || '';
       let safeMeaning = meaning || '';
 
-      const requestURL = `${this.API_URL}/generate-examples`;
+      // 절대 URL로 생성 (명시적 경로)
+      const requestURL = this.getFullApiUrl('generate-examples');
       console.log('요청 전체 URL:', requestURL);
 
       // 프록시 서버에 요청

@@ -99,7 +99,12 @@ document.addEventListener('DOMContentLoaded', function () {
     serverStatus.className = 'checking';
 
     try {
-      const response = await fetch('/api/health', {
+      // 절대 URL 사용
+      const origin = window.location.origin;
+      const healthUrl = `${origin}/api/health`;
+      console.log('서버 상태 확인 URL:', healthUrl);
+
+      const response = await fetch(healthUrl, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
