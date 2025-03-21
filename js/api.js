@@ -146,13 +146,17 @@ const ApiService = {
   generateExamples: async function (word, pinyin, meaning) {
     try {
       console.log('예문 생성 요청 파라미터:', { word, pinyin, meaning });
+      console.log('API URL:', this.API_URL);
 
       // 병음이나 의미가 없으면 기본값 설정
       let safePin = pinyin || '';
       let safeMeaning = meaning || '';
 
+      const requestURL = `${this.API_URL}/generate-examples`;
+      console.log('요청 전체 URL:', requestURL);
+
       // 프록시 서버에 요청
-      const response = await fetch(`${this.API_URL}/generate-examples`, {
+      const response = await fetch(requestURL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

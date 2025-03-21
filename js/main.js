@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', function () {
   const errorMessage = document.getElementById('error-message');
   const serverStatus = document.getElementById('server-status');
 
+  // API URL 로깅
+  console.log('현재 API URL 설정:', ApiService.API_URL);
+
   // 소개 팝업 관련 요소
   const showAboutBtn = document.getElementById('show-about-btn');
   const aboutPopup = document.getElementById('about-popup');
