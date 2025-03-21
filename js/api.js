@@ -1,7 +1,7 @@
 // Gemini API 연동 (프록시 서버 사용)
 const ApiService = {
-  // API 서버 URL (개발용 프록시 서버)
-  API_URL: 'https://jindamnote-server.onrender.com',
+  // API 서버 URL (리디렉션 규칙 사용)
+  API_URL: '/api',
 
   // 단어의 병음과 의미 가져오기
   getWordInfo: async function (word) {
@@ -30,7 +30,7 @@ const ApiService = {
       }
 
       // 프록시 서버에 요청
-      const response = await fetch(`${this.API_URL}/api/word-info`, {
+      const response = await fetch(`${this.API_URL}/word-info`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -152,7 +152,7 @@ const ApiService = {
       let safeMeaning = meaning || '';
 
       // 프록시 서버에 요청
-      const response = await fetch(`${this.API_URL}/api/generate-examples`, {
+      const response = await fetch(`${this.API_URL}/generate-examples`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
