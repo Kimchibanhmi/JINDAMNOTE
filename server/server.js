@@ -16,9 +16,24 @@ const auth = new GoogleAuth({
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 미들웨어 설정
-app.use(cors()); // 모든 출처에서의 요청 허용
+// 환경 변수에서 허용된 출처 가져오기
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',')
+  : ['https://jindamnote.onrender.com', 'http://localhost:8080'];
+
+// CORS 설정
+app.use(
+  cors({
+    origin: ['https://jindamnote.onrender.com', 'http://localhost:8080'],
+    methods: ['GET', 'POST', 'OPTIONS'],
+    credentials: true,
+    optionsSuccessStatus: 204,
+  })
+); // 프론트엔드 도메인을 명시적으로 허용
 app.use(express.json()); // JSON 요청 바디 파싱
+
+// 프리플라이트 요청 처리
+app.options('*', cors());
 
 // 서버 상태 확인 엔드포인트
 app.get('/api/health', (req, res) => {
