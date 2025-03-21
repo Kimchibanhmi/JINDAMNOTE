@@ -166,6 +166,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       try {
         // 예문 생성 API 호출
+        console.log('API 요청 URL:', `${ApiService.API_URL}/generate-examples`);
         currentExamples = await ApiService.generateExamples(
           chineseWord,
           currentWord.pinyin,
